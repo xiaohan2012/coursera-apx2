@@ -1,0 +1,71 @@
+\documentclass{article}
+\usepackage{graphicx}
+\usepackage{xspace}
+\usepackage{amsmath}
+
+\begin{document}
+
+\title{Approximation Algorithms Part II: week 1 assignment}
+\author{Anonymous}
+
+\maketitle
+
+\newcommand{\abs}[1]{|#1|}
+
+\section*{Primal-dual algorithm for Set Cover}
+
+\paragraph{Q1. }
+
+\begin{tabular}{crr}
+  maximize  & $\sum_{i=1}^n y_i$ & \\
+  s.t.      & $\sum_{i: e_i \in S_j} \le w_j$ & $\forall j=1,\ldots,m$ \\
+            & $y_i \ge 0$ & $\forall j=1,\ldots,m$
+\end{tabular}
+
+\paragraph{Q2. }
+
+At most $n$ iterations.
+
+\paragraph{Q3. }
+
+Each iteration covers at least one different elements, and there are $n$ elements to cover. Therefore, the algorithm terminates with all elements covered.
+
+\paragraph{Q4. }
+
+$\text{val}(y^*) \le \text{OPT}$. 
+
+\paragraph{Q5. }
+
+Due to step 3 in the algorithm, the constraints in dual problem is always satisfied, thus solution $y$ is feasible for the dual. 
+
+\paragraph{Q6. }
+
+$\text{val}(y) \le \text{val}(y^*) \le \text{OPT}$. 
+
+\paragraph{Q7. }
+
+$\sum_{i: e_i \in S_j} y_i = w_j$ for all $j \in I$. 
+
+\paragraph{Q8. }
+
+$\sum_{j \in I} \sum_{i: e_i \in S_j} y_i = \sum_{j \in I} w_j$. 
+
+\paragraph{Q9. }
+
+\begin{align*}
+  \sum_{j \in I} w_j = \sum_{j \in I} w_j x_j &= \sum_{j \in I} \sum_{i: e_i \in S_j} x_j y_i \\
+                                              &= \sum_{j} \sum_{i: e_i \in S_j} x_j y_i \\
+                                              &= \sum_{i} \left( \sum_{j: e_i \in S_j} x_j \right) y_i \\
+                                              &= f \sum_{i} y_i \\
+                                              &= f \text{val}(y)
+\end{align*}
+
+\paragraph{Q10. }
+
+Therefore,
+
+\[  \sum_{j \in I} w_j \le f \cdot \text{val}(y) \le f \cdot \text{OPT}\]
+
+So, this algorithm gives $f$-approximation.
+
+\end{document}
