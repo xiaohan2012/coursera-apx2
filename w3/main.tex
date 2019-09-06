@@ -5,7 +5,7 @@
 
 \begin{document}
 
-\title{Approximation Algorithms Part II: week 2 assignment}
+\title{Approximation Algorithms Part II: week 3 assignment}
 \author{Anonymous}
 
 \maketitle
@@ -44,9 +44,10 @@ Using the algorithm for facility location problem discussed in the lectures to s
 We have:
 
 \[
-  \sum_{\text{cluster} C_0} 3\lambda + \sum_{j \in C_0} c(i, j) \le 3 \sum_{j \in C} \alpha_j
+  \sum_{\text{cluster } C_0} (3\lambda + \sum_{j \in C_0} c(i_{C_0}, j)) \le 3 \sum_{j \in C} \alpha_j
 \]
 
+where $i_{C_0}$ is the opened facility for cluster $C_0$.
 
 \paragraph{Q3. }
 
@@ -107,8 +108,7 @@ Using the results from Q5 and Q6:
 
 \paragraph{Q9. }
 
-The probability should be $\delta_1$. 
-I assume $f_1$ is not the closest among $S_1$ to any of the opened facilities in $S_2$. 
+It seems to be $\delta_1$ (for the sake of proof). 
 
 \paragraph{Q10. }
 
@@ -134,7 +134,18 @@ $c(i, j) \le c(j, f_2) + c(f_1, f_2) \le c(j, f_2) + c(f_1, j) + c(j, f_2) = c_j
 
 \begin{align*}  
   & \text{Total cost } \\
-  \le & \sum_{j \in C} \delta_1 c_j^1 + \delta_2 (c_j^1 + 2c_j^2) \\
-  \le & \sum_{j \in C} \delta_1 \alpha_j^1 + \delta_2 (\alpha_j^1 + 2 \alpha_j^2)
+  \le & \sum_{j \in C} (\delta_1 c_j^1 + \delta_2 (c_j^1 + 2c_j^2)) \\
+  \le & \sum_{j \in C} (\delta_1 \alpha_j^1 + \delta_2 (\alpha_j^1 + 2 \alpha_j^2)) \\
+  \le & 2 \sum_{j \in C} (\delta_1 \alpha_j^1 + \delta_2 \alpha_j^2) \\
+  \le & 2 \sum_{j \in C} \tilde{\alpha}_j \\
+  \le & 2 \opt
 \end{align*}
+
+\paragraph{My questions:}
+
+
+\begin{itemize}
+\item I cannot see a connection between the dual solution $(\tilde{\alpha}, \tilde{\beta})$ and the primal integral solution obtained by the above procedures.
+\item Q9 is a bit weird. What if there are fewer than $|S_2|$ opened in the first phase (before randomized opening), the probability is larger than $\delta_1$. 
+\end{itemize}
 \end{document}
