@@ -1,0 +1,140 @@
+\documentclass{article}
+\usepackage{graphicx}
+\usepackage{xspace}
+\usepackage{amsmath}
+
+\begin{document}
+
+\title{Approximation Algorithms Part II: week 2 assignment}
+\author{Anonymous}
+
+\maketitle
+
+\newcommand{\abs}[1]{|#1|}
+\newcommand{\cost}{\text{cost}}
+\newcommand{\opt}{\text{OPT}\xspace}
+\newcommand{\p}{\text{Prob}\xspace}
+
+\section*{Primal-dual algorithm for $k$-median problem}
+
+For quicker reference, we write down LP2 here explicitly:
+
+
+\begin{tabular}{ccl}
+  minimize  & $\sum_{i, j \in F\times C} x_{ij} c_{ij} + \lambda \sum_{i \in F} y_i - \lambda k$ & \\
+  s.t.      & $\sum_{i \in F} x_{ij} \ge 1$ & $\forall j \in C$ \\
+            & $y_i - x_{ij} \ge 0$ & $\forall i, h \in F\times C$ \\
+            & $y_{i} \ge 0$ & $\forall i \in F$ \\
+            & $x_{ij} \ge 0$ & $\forall i, j \in F\times C$
+\end{tabular}
+
+\paragraph{Q1. }
+
+\begin{tabular}{ccl}
+  maximize  & $\sum_{j \in C} \alpha_j$ & \\
+  s.t.      & $\alpha_j - \beta_{ij} \le c_{ij}$ & $\forall i,j \in F\times C$ \\
+            & $\sum_{j \in C} \beta_{ij} \le \lambda$ & $\forall i \in F$ \\
+            & $\alpha_j \ge 0$ & $\forall j \in C$ \\
+            & $\beta_{ij} \ge 0$ & $\forall i, j \in F\times C$
+\end{tabular}
+
+\paragraph{Q2. }
+
+Using the algorithm for facility location problem discussed in the lectures to solve LP2, let's denote the corresponding primal solution by $\{C_0\}$ and dual solutions by $\{\alpha_j\}$ and $\{\beta_{ij}\}$.
+We have:
+
+\[
+  \sum_{\text{cluster} C_0} 3\lambda + \sum_{j \in C_0} c(i, j) \le 3 \sum_{j \in C} \alpha_j
+\]
+
+
+\paragraph{Q3. }
+
+If we're lucky to have exactly $k$ opened facilities, the algorithm gives 3-approximation to the $k$-median problem. 
+
+\paragraph{Q4. }
+
+When $\lambda=\lambda_1$, all facilities are opened to minimize the objective.
+Therefore at least $k$ facilities are opened (assuming $|F|\ge k$)
+
+For the case of $\lambda=\lambda_2$, the idea is to show we can achieve a much better solution by opening fewer than $k$ facilities compared to opening more than $k$ facilities. Therefore, the $3$-approximation ratio should fail when opening more than $k$ facilities. 
+
+Suppose $k+k^{'}$ facilities are opened for some positive integer $k^{'}$, the objective value becomes $\sum_{i, j \in F\times C} x_{ij} c_{ij} + k^{'} \lambda_2$.
+It's easy to see that $\sum_{i, j \in F\times C} x_{ij} c_{ij} <= k^{'} \lambda_2$.
+Therefore, we can achieve a better objective by opening $k$ facilities, where the objective value becomes $\sum_{i, j \in F\times C} x_{ij} c_{ij}$.
+
+
+\paragraph{Q5. }
+
+\[
+  3 \abs{S_1}\lambda_1 + \cost(S_1)  \le 3\sum_{j \in C} \alpha^1_j
+\]
+
+\[
+  3 \abs{S_2}\lambda_2 + \cost(S_2)  \le 3\sum_{j \in C} \alpha^2_j
+\]  
+
+\paragraph{Q6. }
+
+\begin{align*}
+  \cost(S_1) &\le 3 \sum_{j \in C} \alpha^1_j - 3 \lambda_1 \abs{S_1} \\
+             &\le 3 \sum_{j \in C} \alpha^1_j - 3 \abs{S_1} (\lambda_2 - \epsilon c_{min} / (3\abs{F}))  \\
+             &\le 3 \sum_{j \in C} \alpha^1_j - 3 \lambda_2 \abs{S_1} + \epsilon c_{min} \abs{S_1} / \abs{F}  \\
+             &\le 3 \sum_{j \in C} \alpha^1_j - 3 \lambda_2 \abs{S_1} + \epsilon \opt  \abs{S_1} / \abs{F}\\
+             &\le 3 \sum_{j \in C} \alpha^1_j - 3 \lambda_2 \abs{S_1} + \epsilon \opt  \abs{F} / \abs{F}\\
+             &\le 3 (\sum_{j \in C} \alpha^1_j - \lambda_2 \abs{S_1}) + \epsilon \opt
+\end{align*}
+
+\paragraph{Q7. }
+
+Using the results from Q5 and Q6:
+
+\begin{align*}
+      & \delta_1 \cost(S_1) + \delta_2 \cost(S_2) \\
+  \le & 3(\delta_1 \sum_j \alpha^1_j + \delta_2 \sum_j \alpha^2_j) - 3 \lambda_2 (\delta_1 \abs{S_1} + \delta_2 \abs{S_2}) + \delta_1 \epsilon \opt \\
+  \le & 3 \sum_j \tilde{\alpha}_j - 3\lambda_2 k + \delta_1 \epsilon \opt \\
+  \le & 3 \sum_j \tilde{\alpha}_j + 3 \delta_1 \epsilon \opt \\
+  \le & 3 \opt + 3 \delta_1 \epsilon \opt \\
+\end{align*}
+
+\paragraph{Q8. }
+
+\begin{align*}
+  \cost(S_2) & \le 2 (\delta_1 \cost(S_1) + \delta_2 \cost(S_2)) \\
+             & \le 2(3+\delta_1 \epsilon) \opt \\
+             & \le 2(3+\epsilon) \opt \\
+\end{align*}
+
+\paragraph{Q9. }
+
+The probability should be $\delta_1$. 
+I assume $f_1$ is not the closest among $S_1$ to any of the opened facilities in $S_2$. 
+
+\paragraph{Q10. }
+
+$c(i, f_2) \le c(f_1, f_2)$ because $i$ is the closest facility in $S_1$ to $f_2$. 
+
+\paragraph{Q11. }
+
+Using triangle inequality on $c(f_1, f_2)$:
+
+$c(i, j) \le c(j, f_2) + c(f_1, f_2) \le c(j, f_2) + c(f_1, j) + c(j, f_2) = c_j^1 + 2 c_j^2$
+
+\paragraph{Q12. }
+
+\begin{align*}
+  & \text{Expected cost for client}\ j \\
+  \le& \p[f_1 \text{ is opened}] c_j^1 + \p[f_1 \text{ is not opened}] (c_j^1 + 2c_j^2) \\
+  = & \delta_1 c_j^1 + (1-\delta_1) (c_j^1 + 2c_j^2) \\
+  = & \delta_1 c_j^1 + \delta_2 (c_j^1 + 2c_j^2) 
+\end{align*}
+
+
+\paragraph{Q13. }
+
+\begin{align*}  
+  & \text{Total cost } \\
+  \le & \sum_{j \in C} \delta_1 c_j^1 + \delta_2 (c_j^1 + 2c_j^2) \\
+  \le & \sum_{j \in C} \delta_1 \alpha_j^1 + \delta_2 (\alpha_j^1 + 2 \alpha_j^2)
+\end{align*}
+\end{document}

@@ -123,3 +123,4 @@ dumps/
 slurm*.out
 cmds/*
 *.zip
+*aux

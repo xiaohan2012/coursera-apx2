@@ -1,0 +1,109 @@
+\documentclass{article}
+\usepackage{graphicx}
+\usepackage{xspace}
+\usepackage{amsmath}
+
+\begin{document}
+
+\title{Approximation Algorithms Part II: week 2 assignment}
+\author{Anonymous}
+
+\maketitle
+
+\newcommand{\abs}[1]{|#1|}
+\newcommand{\val}{\text{val}}
+
+\section*{Primal-dual algorithm for Shortest Path problem}
+
+\paragraph{Q1. }
+
+\begin{tabular}{crr}
+  maximize  & $\sum_{S \in \mathcal{S}} y_S$ & \\
+  s.t.      & $\sum_{S \in \mathcal{S}: e \in S} y_S \le w(e)$ & $\forall e \in E$ \\
+            & $y_S \ge 0$ & $\forall S \in \mathcal{S}$
+\end{tabular}
+
+\paragraph{Q2. }
+
+At most $|V|-1$ iterations.
+
+\paragraph{Q3. }
+
+After each iteration, an edge is added and the size of $C$ increases by 1.
+After $|V|-1$ iterations, $C$ contains all $V$.
+So there is at least one path from $s$ to $t$ when the algorithm terminates. 
+
+\paragraph{Proof of Lemma 1}
+
+We want to show after $i$ iterations, $\abs{F_i}=i$. 
+Initially, $\abs{F_0}=0$ because $C$ contains only $s$. 
+After the 1st iteration, $\abs{F_1}=1$ because step 3 adds one edge.
+Assuming after iteration $i-1$, $\abs{F_{t-1}}=i-1$.
+Then after iteration $i$, $\abs{F_t}=\abs{F_{t-1}}+1=t$ because of step 3.
+And this concludes our proof.
+
+\paragraph{Q4. }
+
+$\val(y^{*}) \le \val(P^*)$ due to weak complementary slackness.
+
+\paragraph{Q5. }
+
+At any iteration, suppose an edge $e^{′}$ is added to $F$. And nods in $e^{'}$ are included into $C$. Obviously, $e$ is not crossing $C$ and $V \setminus C$. 
+In the next step, we only increase $y_C$. Therefore, the constraint in dual related to $w(e^{'})$ is never broken. Therefore, the solution $y$ is feasible for the dual. 
+
+\paragraph{Q6. }
+
+We have $\val(y) \le \val(P^*)$.
+
+\paragraph{Q7. }
+
+$w(e) = \sum_{S \in \mathcal{S}: e \in \delta(S)} y_S$. 
+
+\paragraph{Q8. }
+
+$\sum_{e \in P} w(e) = \sum_{e \in P} \sum_{S \in \mathcal{S}: e \in \delta(S)} y_S$ 
+
+\paragraph{Q9. }
+
+$\sum_{e \in P} \sum_{S \in \mathcal{S}: e \in \delta(S)} y_S = \sum_{S \in \mathcal{S}} y_S \sum_{e \in P \cap \delta(S)} = \sum_{S \in \mathcal{S}} y_S \abs{P \cap \delta(S)}$
+
+\paragraph{Q10. }
+
+If $|P\cap \delta(S)|>=2$, it means there is a cycle in some $S^{'}$ after $S$. This contradicts with the fact that $S^{'}$ is a tree (Lemma 1). 
+
+\paragraph{Q11. }
+
+The primal-dual algorithm is optimal. 
+
+\paragraph{Q12. }
+
+Intuitively, pruning is needed to remove unnecessary edges. It's used in question 10. 
+
+\paragraph{Q13. }
+
+The forward direction: if $(s, i)$ is the first edge added to $F$, it means $(s, i)$ has the minimum $w(s, j)$ among all neighbors $j$ of $s$.
+In Dijkstra algorithm, $i$ is not in $D$ and minimizes $d(i)$. So it's selected.
+
+The reverse direction, if $i$ is selected, it means $d(i)$ is minimal among all neighbors of $s$. And $d(i)$ is initialized to be $w(s, i)$. Therefore, $(s, i)$ is chosen first by the primal-dual algorithm. 
+
+\paragraph{Q14. }
+
+The vertex $j$ with minimum $l(j)$ will be added to $C_0$. 
+
+\paragraph{Q15. }
+
+$\{i \in \text{neighbor}(j): i \not\in S^{'}\}$, i.e. $j$'s neighbors that are not in $S^{'}$ 
+
+\paragraph{Q16. }
+
+For $k \not\in S^{'}, l(k) = l(j) + w(k, j)$. 
+
+\paragraph{Q17. }
+
+The same order! 
+
+\paragraph{Q18. }
+
+$O(n^2)$ if you consider a complete graph. 
+
+\end{document}
